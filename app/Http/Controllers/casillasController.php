@@ -25,8 +25,12 @@ class casillasController extends Controller
     public function index()
     {
         $idProceso= Auth::user()->id_proceso;
+        $tipoUsuario= Auth::user()->tipo_usuario;
         $casillas = Casilla::where('id_proceso', $idProceso)->latest('id_casilla')->paginate(3);
-        return view('casillas.casillas', compact('casillas'));
+        return view('casillas.casillas', [
+            'idProceso' => $idProceso,
+            'tipoUsuario' => $tipoUsuario
+        ]);
     }
 
     /**
