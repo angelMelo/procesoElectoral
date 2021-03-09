@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,7 +20,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
 //end Base
 
@@ -41,6 +40,10 @@ Route::patch('/casillas/{casillas}', 'casillasController@update')->name('casilla
 
 Route::delete('/casillas/{casillas}', 'casillasController@destroy')->name('casillas.destroy');
 
-/* End Becas */
-
 //end casillas
+
+// votos
+
+Route::get('/makeVoto', 'votosController@create')->name('votos.create');
+
+//end votos

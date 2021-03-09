@@ -10,5 +10,5 @@ class Casilla extends Model
     protected $table = 'casillas';
     public $timestamps = false;
     protected $primaryKey = 'id_casilla';
-    protected $fillable = ['id_casilla', 'id_proceso'];
+    protected $fillable = ['id_casilla', 'num_casilla', 'entidad', 'distrito', 'seccion', 'lugar', 'tipo', 'boletas', 'hora_apertura', 'fecha_apertura', 'hora_cierre', 'fecha_cierre', 'id_proceso'];
 }

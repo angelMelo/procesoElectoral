@@ -13,11 +13,11 @@
     @include('partials.materialcss')
     @include('partials.materialjs')
 </head>
-<body class="blue-grey lighten-5">
+<body class="#ffffff white">
     <div id="app">
         <div class="navbar-fixed">
 
-        <nav class="lime darken-4">
+        <nav class="blue accent-3">
             <div class="nav-wrapper">
                 <div style="text-align: right">
                     <a href="#" data-target="menu-responsive" class="sidenav-trigger">
@@ -28,28 +28,29 @@
                                 @guest
                                     @if (Route::has('login'))
                                     <li>
-                                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                                     </li>
                                     @endif
-
+                                    <!--
                                     @if (Route::has('register'))
                                     <li>
                                         <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                     </li>
-                                    @endif                                    
+                                    @endif    
+                                    -->                              
                                 @else
                                     <li><a href="{{ route('home') }}" class="waves-effect waves-teal">Home</a></li>
                                     <li><a href="{{ route('casillas.index') }}" class="waves-effect waves-teal">Casillas</a></li>
                                     <li>
                                         <a onclick="M.toast({html: 'Tu sesión esta Activa'})">
-                                            <span>Usuario</span> {{ Auth::user()->name }}
+                                            <span>Bienvenido: </span> {{ Auth::user()->name }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
+                                                {{ __('Cerrar Sesión') }}
                                         </a>
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -69,15 +70,15 @@
             <!-- Authentication Links -->
             @guest
                 <li>
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                 </li>
-                <!--    
+            <!--    
             @if (Route::has('register'))
                 <li>
                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                 </li>
             @endif
-                -->
+             -->
             @else
                 <li><a href="{{ route('home') }}" class="waves-effect waves-teal">Home</a></li>
                 <li><a href="{{ route('casillas.index') }}" class="waves-effect waves-teal">Casillas</a></li>
@@ -90,7 +91,7 @@
                     <a href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            {{ __('Cerrar Sesión') }}
                     </a>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

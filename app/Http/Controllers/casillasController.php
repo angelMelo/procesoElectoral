@@ -29,7 +29,8 @@ class casillasController extends Controller
         $casillas = Casilla::where('id_proceso', $idProceso)->latest('id_casilla')->paginate(3);
         return view('casillas.casillas', [
             'idProceso' => $idProceso,
-            'tipoUsuario' => $tipoUsuario
+            'tipoUsuario' => $tipoUsuario,
+            'casillas' => $casillas
         ]);
     }
 
@@ -51,7 +52,48 @@ class casillasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $id_proceso = Auth::user()->id_proceso;
+            $num_casilla = $request->get('num_casilla');
+            $entidad = $request->get('entidad');
+            $distrito = $request->get('distrito');
+            $seccion = $request->get('seccion');
+            $lugar = $request->get('lugar');
+            $tipo = $request->get('tipo');
+            $boletas = $request->get('boletas');
+            $hora_apertura = $request->get('hora_apertura');
+            $fecha_apertura = date("Y-m-d H:i:s");
+            $existencia = Casilla::where('num_casilla', $num_casilla)->get();
+
+            if (count($existencia) >= 1){
+
+                $message = 'Error: La casilla seleccionada ya existe.';
+
+            }else{
+
+                Casilla::create([
+                    'num_casilla' => $num_casilla,
+                    'entidad' => $entidad,
+                    'distrito' => $distrito,
+                    'seccion' => $seccion,
+                    'lugar' => $lugar,
+                    'tipo' => $tipo,
+                    'boletas' => $boletas,
+                    'hora_apertura' => $hora_apertura,
+                    'fecha_apertura' => $fecha_apertura,
+                    'id_proceso' => $id_proceso
+                ]);
+    
+                $message = 'Se agregó la casilla exitosamente.';
+
+            }
+
+        }catch (\Illuminate\Database\QueryException $e){
+
+            $message = 'Error: Imposible de insertar.';
+        }
+
+        return redirect()->route('casillas.index')->with('message', $message);
     }
 
     /**
@@ -60,9 +102,13 @@ class casillasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id_casilla)
     {
-        //
+        $casillas = Casilla::findOrFail($id_casilla); 
+
+        return view('casillas.show', [
+            'casillas' => $casillas
+        ]);
     }
 
     /**
@@ -71,9 +117,32 @@ class casillasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($casillas)
     {
-        //
+        $result = Casilla::findOrFail($casillas); 
+        $num_casilla = $result->num_casilla;
+        $entidad = $result->entidad;
+        $distrito = $result->distrito;
+        $seccion = $result->seccion;
+        $lugar = $result->lugar;
+        $tipo = $result->tipo;
+        $boletas = $result->boletas;
+        $hora_apertura = $result->hora_apertura;
+        $fecha_apertura = $result->fecha_apertura;
+        $hora_cierre = $result->hora_cierre;
+
+        return view('casillas.edit', [
+            'result' => $result,
+            'num_casilla' => $num_casilla,
+            'entidad' => $entidad,
+            'distrito' => $distrito,
+            'seccion' => $seccion,
+            'lugar' => $lugar,
+            'tipo' => $tipo,
+            'boletas' => $boletas,
+            'hora_apertura' => $hora_apertura,
+            'fecha_apertura' => $fecha_apertura
+        ]);
     }
 
     /**
@@ -83,9 +152,24 @@ class casillasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $result)
     {
-        //
+        try {
+            $hora_cierre = $request->get('hora_cierre');
+            $fecha_cierre = date("Y-m-d H:i:s");
+
+            Casilla::where('id_casilla', $result)->update([
+                'hora_cierre' => $hora_cierre,
+                'fecha_cierre' => $fecha_cierre
+
+            ]);
+
+            $message = 'Registro actualizado exitosamente.';
+        } catch (\Illuminate\Database\QueryException $e) {
+            $message = 'Error: imposible de actualizar.';
+        }
+
+        return redirect()->route('casillas.index')->with('message', $message);
     }
 
     /**
@@ -94,8 +178,15 @@ class casillasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($casillas)
     {
-        //
+        try {
+            Casilla::destroy($casillas);
+            $message = 'Registro de casilla eliminado exitosamente.';
+        } catch (\Illuminate\Database\QueryException $e) {
+            $message = 'Error: imposible de eliminar.';
+        }
+
+        return redirect()->route('casillas.index')->with('message', $message);
     }
 }
