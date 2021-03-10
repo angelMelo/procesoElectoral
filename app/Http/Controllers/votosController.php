@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Voto;
+
 class votosController extends Controller
 {
     /**
@@ -23,6 +25,18 @@ class votosController extends Controller
     public function index()
     {
         //
+    }
+
+    public function graficas()
+    {
+        $voto_1 = Voto::find(1);
+
+        return view('votos.grafica',
+            [
+                'resultado' => $voto_1->con_letra
+            ]
+    
+        );
     }
 
     /**

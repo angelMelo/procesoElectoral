@@ -46,4 +46,6 @@ Route::delete('/casillas/{casillas}', 'casillasController@destroy')->name('casil
 
 Route::get('/makeVoto', 'votosController@create')->name('votos.create');
 
+Route::get('/graph', 'votosController@graficas')->name('votos.grafica');
+
 //end votos
