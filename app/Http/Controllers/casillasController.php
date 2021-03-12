@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Casilla;
+use App\Models\Partido;
+use App\Models\Voto;
 
 class casillasController extends Controller
 {
@@ -105,9 +107,13 @@ class casillasController extends Controller
     public function show($id_casilla)
     {
         $casillas = Casilla::findOrFail($id_casilla); 
+        $partidos = Partido::get();
+        $votos = Voto::with('partido')->where('id_casilla', $id_casilla)->get();
 
         return view('casillas.show', [
-            'casillas' => $casillas
+            'casillas' => $casillas,
+            'partidos' => $partidos,
+            'votos' => $votos
         ]);
     }
 

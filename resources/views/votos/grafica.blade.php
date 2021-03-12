@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@include('partials.googlecharts')
+
 @section('content')
 
 <!-- crear contenido -->
