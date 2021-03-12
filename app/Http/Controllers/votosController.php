@@ -33,8 +33,7 @@ class votosController extends Controller
 
     public function graficas()
     {
-        $voto_1 = Voto::find(1);
-
+        $voto_1 = Voto::find(5);
         return view('votos.grafica',
             [
                 'resultado' => $voto_1->con_letra

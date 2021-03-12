@@ -14,13 +14,14 @@
 </div>
 
 <script type="text/javascript">
+    var $votosj = @json($votos);
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
      var data = google.visualization.arrayToDataTable([
         ['Partido', 'Votos'], 
         @foreach($votos as $row) 
-            [ '{{ $row->partido->nombre }}', '{{ $row->con_numero }}' ],
+            [ '{{ $row->partido->nombre }}', parseInt('{{ $row->con_numero }}') ],
         @endforeach 
     ]);
 
