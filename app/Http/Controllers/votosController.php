@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Voto;
 use App\Models\Partido;
+use App\Models\Candidato;
 
 class votosController extends Controller
 {
@@ -26,8 +27,16 @@ class votosController extends Controller
     public function index()
     {
         $votos = Voto::with('partido')->get();
+        $votos_candidatos = Candidato::join("partidos", 
+                    "partidos.id_candidato","=","candidatos.id_candidato"
+                    )->leftjoin(
+                        "votos", "votos.id_partido", "=", "partidos.id_partido"
+                    )->groupBy('candidatos.id_candidato'
+                    )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, candidatos.nombre as nombre'
+                    )->get();
         return view('votos.graph', [
-            'votos' => $votos
+            'votos' => $votos,
+            'candidatos' => $votos_candidatos
         ]);
     }
 
