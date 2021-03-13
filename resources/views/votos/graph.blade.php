@@ -4,6 +4,10 @@
 
 @section('content')
 
+<head>
+    <meta name="_token" content="{{csrf_token()}}" />
+</head>
+
 <div class="container">
     <div class="row">
         <h3>Test grafica desde base de datos</h3>
@@ -19,14 +23,35 @@
 
 </div>
 
+<!-- <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+</script> -->
 <script type="text/javascript">
-    var $votosj = @json($votos);
-    console.log(
-        @json($candidatos)
-    );
+
+$(document).ready(function(){
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     google.charts.setOnLoadCallback(drawChartCandidato);
+});
+
+    function votos_candidatos(handleData){
+        $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+        $.ajax({
+            url: "{{url('/graphdata')}}",
+            type: 'GET',
+            success: function (data){
+                handleData(data);
+            },
+            error: function(e){
+                console.log(e);
+            }
+        });
+    }
     function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Partido', 'Votos'], 
@@ -52,6 +77,23 @@
         else if (window.attachEvent) {
             window.attachEvent('onresize', resizeHandler);
         }
+
+        setInterval(() => {
+            votos_candidatos(
+                function(output){
+                    var $votos = output['votos'];
+                    var data = google.visualization.arrayToDataTable([
+                        ['Partido', 'Votos'], 
+                        @foreach($votos as $row) 
+                            [ '{{ $row->nombre }}', parseInt('{{ $row->suma }}') ],
+                        @endforeach 
+                    ]);
+                    chart.draw(data, options);
+                }
+            );
+        }, 4000);
+
+
     }
 
     function drawChartCandidato() {
@@ -79,6 +121,21 @@
         else if (window.attachEvent) {
             window.attachEvent('onresize', resizeHandler);
         }
+
+        setInterval(() => {
+            votos_candidatos(
+                function(output){
+                    var $votos = output['candidatos'];
+                    var data = google.visualization.arrayToDataTable([
+                        ['Candidato', 'Votos'], 
+                        @foreach($candidatos as $row) 
+                            [ '{{ $row->nombre }}', parseInt('{{ $row->suma }}') ],
+                        @endforeach 
+                    ]);
+                    chart.draw(data, options);
+                }
+            );
+        }, 4000);
 
 
     }

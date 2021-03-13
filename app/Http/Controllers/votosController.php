@@ -46,6 +46,28 @@ class votosController extends Controller
         ]);
     }
 
+    public function ajaxgraphdata()
+    {
+        $votos = Voto::join("partidos",
+                            "partidos.id_partido","=","votos.id_partido"
+                        )->groupBy('votos.id_partido'
+                        )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, partidos.nombre as nombre'
+                        )->get();
+
+        $votos_candidatos = Candidato::join("partidos", 
+                    "partidos.id_candidato","=","candidatos.id_candidato"
+                    )->leftjoin(
+                        "votos", "votos.id_partido", "=", "partidos.id_partido"
+                    )->groupBy('candidatos.id_candidato'
+                    )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, candidatos.nombre as nombre'
+                    )->get();
+        return response()->json([
+            'votos' => $votos,
+            'candidatos' => $votos_candidatos
+        ]);
+    }
+
+
     public function graficas()
     {
         $voto_1 = Voto::find(5);

@@ -52,4 +52,6 @@ Route::get('/graph', 'votosController@graficas')->name('votos.grafica');
 
 Route::get('/graphs', 'votosController@index')->name('votos.graph');
 
+Route::get('/graphdata', 'votosController@ajaxgraphdata')->name('votos.datgrap');
+
 //end votos
