@@ -31,7 +31,7 @@
         var data = google.visualization.arrayToDataTable([
             ['Partido', 'Votos'], 
             @foreach($votos as $row) 
-                [ '{{ $row->partido->nombre }}', parseInt('{{ $row->con_numero }}') ],
+                [ '{{ $row->nombre }}', parseInt('{{ $row->suma }}') ],
             @endforeach 
         ]);
 

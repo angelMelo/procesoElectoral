@@ -29,7 +29,9 @@
                                 </div>
                                 <div class="card-content white-text">
                                     <h5>Casilla #{{ $row->num_casilla }}</h5>
-                                    <p>Entidad: {{ $row->entidad }}</p>
+                                    <!--<p>Entidad: {{ $row->entidad }}</p>-->
+                                    <p>Lugar: {{ $row->lugar }}</p>
+                                    <p>Apertura: {{ $row->hora_apertura }}</p>
                                 </div>
                             </div>
                         </div>

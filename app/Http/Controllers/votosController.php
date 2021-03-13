@@ -26,7 +26,13 @@ class votosController extends Controller
      */
     public function index()
     {
-        $votos = Voto::with('partido')->get();
+        //$votos = Voto::with('partido')->get();
+        $votos = Voto::join("partidos",
+                            "partidos.id_partido","=","votos.id_partido"
+                        )->groupBy('votos.id_partido'
+                        )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, partidos.nombre as nombre'
+                        )->get();
+
         $votos_candidatos = Candidato::join("partidos", 
                     "partidos.id_candidato","=","candidatos.id_candidato"
                     )->leftjoin(
@@ -75,7 +81,7 @@ class votosController extends Controller
             $con_letra = $request->get('con_letra');
             $con_numero = $request->get('con_numero');
             $id_casilla = $request->get('id_casilla');
-            $existencia = Voto::where('id_partido', $id_partido)->get();
+            $existencia = Voto::where('id_partido', $id_partido)->where('id_casilla', $id_casilla)->get();
 
             if (count($existencia) >= 1){
 

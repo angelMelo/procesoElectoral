@@ -28,7 +28,7 @@ class casillasController extends Controller
     {
         $idProceso= Auth::user()->id_proceso;
         $tipoUsuario= Auth::user()->tipo_usuario;
-        $casillas = Casilla::where('id_proceso', $idProceso)->latest('id_casilla')->paginate(3);
+        $casillas = Casilla::where('id_proceso', $idProceso)->latest('id_casilla')->paginate(6);
         return view('casillas.casillas', [
             'idProceso' => $idProceso,
             'tipoUsuario' => $tipoUsuario,
@@ -55,6 +55,7 @@ class casillasController extends Controller
     public function store(Request $request)
     {
         try {
+    
             $id_proceso = Auth::user()->id_proceso;
             $num_casilla = $request->get('num_casilla');
             $entidad = $request->get('entidad');
@@ -87,13 +88,12 @@ class casillasController extends Controller
                 ]);
     
                 $message = 'Se agregó la casilla exitosamente.';
-
             }
 
         }catch (\Illuminate\Database\QueryException $e){
 
             $message = 'Error: Imposible de insertar.';
-        }
+        }    
 
         return redirect()->route('casillas.index')->with('message', $message);
     }
