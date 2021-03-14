@@ -34,6 +34,8 @@ Route::post('/casillas', 'casillasController@store')->name('casillas.store');
 
 Route::get('/casillas/{id_casilla}', 'casillasController@show')->name('casillas.show');
 
+Route::get('/casilla/{id_casilla}', 'casillasController@imp')->name('casillas.imp');
+
 Route::get('/casillas/{casillas}/editcasillas', 'casillasController@edit')->name('casillas.edit');
 
 Route::patch('/casillas/{casillas}', 'casillasController@update')->name('casillas.update');
@@ -53,5 +55,7 @@ Route::get('/graph', 'votosController@graficas')->name('votos.grafica');
 Route::get('/graphs', 'votosController@index')->name('votos.graph');
 
 Route::get('/graphdata', 'votosController@ajaxgraphdata')->name('votos.datgrap');
+
+Route::get('/impugnar', 'votosController@impugnar')->name('votos.impugnar');
 
 //end votos

@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="row">
-        <h3>Test grafica desde base de datos</h3>
+        <h3>Consultar información</h3>
     </div>
 
     <div class="row">

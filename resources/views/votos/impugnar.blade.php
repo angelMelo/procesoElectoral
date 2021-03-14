@@ -5,11 +5,11 @@
 <div class="container">
 
     <div class="row"><p>
-        <div class="col s10 m11">
+        <div class="col s12 m12">
             <div class="section">
                 <div class="card-panel pink darken-3">
                     <div class="card-content white-text">
-                        <h3>Casillas</h3>
+                        <h3>Casillas a impugnar</h3>
                     </div>    
                 </div>
             </div>
@@ -21,7 +21,7 @@
             @endif
             <div class="section">
                 @forelse($casillas as $row)
-                    <a href="{{ route('casillas.show', $row->id_casilla) }}">
+                    <a href="{{ route('casillas.imp', $row->id_casilla) }}">
                         <div class="col s12 m4">
                             <div class="card small pink darken-3 hoverable">
                                 <div class="card-image">
@@ -29,7 +29,8 @@
                                 </div>
                                 <div class="card-content white-text">
                                     <h5>Casilla #{{ $row->num_casilla }}</h5>
-                                    <p>Entidad: {{ $row->entidad }}</p>
+                                    <!--<p>Lugar: {{ $row->lugar }}</p>-->
+                                    <p>Apertura: {{ $row->hora_apertura }}</p>
                                 </div>
                             </div>
                         </div>
@@ -46,17 +47,7 @@
                     </ul>
                 </div>
             </div>
-        </div>   
-        <div class="col s2 m1">
-            <div class="row">
-                <p>
-                <div style="text-align: right">
-                    <a href="{{ route('casillas.create') }}" class="btn-floating btn-large waves-effect waves-light green">
-                        <i class="large material-icons">add</i>
-                    </a>
-                </div>   
-            </div>
-        </div>  
+        </div>     
     </div>
 
 </div>

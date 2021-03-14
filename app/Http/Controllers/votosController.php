@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Voto;
 use App\Models\Partido;
 use App\Models\Candidato;
+use App\Models\Casilla;
+use App\Models\Proceso;
 
 class votosController extends Controller
 {
@@ -46,39 +50,6 @@ class votosController extends Controller
         ]);
     }
 
-    public function ajaxgraphdata()
-    {
-        $votos = Voto::join("partidos",
-                            "partidos.id_partido","=","votos.id_partido"
-                        )->groupBy('votos.id_partido'
-                        )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, partidos.nombre as nombre'
-                        )->get();
-
-        $votos_candidatos = Candidato::join("partidos", 
-                    "partidos.id_candidato","=","candidatos.id_candidato"
-                    )->leftjoin(
-                        "votos", "votos.id_partido", "=", "partidos.id_partido"
-                    )->groupBy('candidatos.id_candidato'
-                    )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, candidatos.nombre as nombre'
-                    )->get();
-        return response()->json([
-            'votos' => $votos,
-            'candidatos' => $votos_candidatos
-        ]);
-    }
-
-
-    public function graficas()
-    {
-        $voto_1 = Voto::find(5);
-        return view('votos.grafica',
-            [
-                'resultado' => $voto_1->con_letra
-            ]
-    
-        );
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -105,20 +76,28 @@ class votosController extends Controller
             $id_casilla = $request->get('id_casilla');
             $existencia = Voto::where('id_partido', $id_partido)->where('id_casilla', $id_casilla)->get();
 
-            if (count($existencia) >= 1){
+            if( empty($id_partido) ){
 
-                $message = 'Error: El voto para este partido o coalición ya existe.';
+                $message = 'Error: No seleccionaste ningún partido.';
 
             }else{
 
-                Voto::create([
-                    'id_partido' => $id_partido,
-                    'con_letra' => $con_letra,
-                    'con_numero' => $con_numero,
-                    'id_casilla' => $id_casilla
-                ]);
+                if (count($existencia) >= 1){
+
+                    $message = 'Error: El voto para este partido o coalición ya existe.';
     
-                $message = 'Se agregó el voto exitosamente.';
+                }else{
+    
+                    Voto::create([
+                        'id_partido' => $id_partido,
+                        'con_letra' => $con_letra,
+                        'con_numero' => $con_numero,
+                        'id_casilla' => $id_casilla
+                    ]);
+        
+                    $message = 'Se agregó el voto exitosamente.';
+    
+                }
 
             }
 
@@ -173,5 +152,54 @@ class votosController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    //new functions
+
+    public function graficas()
+    {
+        $voto_1 = Voto::find(5);
+        return view('votos.grafica',
+            [
+                'resultado' => $voto_1->con_letra
+            ]
+    
+        );
+    }
+
+    public function ajaxgraphdata()
+    {
+        $votos = Voto::join("partidos",
+                            "partidos.id_partido","=","votos.id_partido"
+                        )->groupBy('votos.id_partido'
+                        )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, partidos.nombre as nombre'
+                        )->get();
+
+        $votos_candidatos = Candidato::join("partidos", 
+                    "partidos.id_candidato","=","candidatos.id_candidato"
+                    )->leftjoin(
+                        "votos", "votos.id_partido", "=", "partidos.id_partido"
+                    )->groupBy('candidatos.id_candidato'
+                    )->selectRaw('ifnull(sum(votos.con_numero),0) as suma, candidatos.nombre as nombre'
+                    )->get();
+        return response()->json([
+            'votos' => $votos,
+            'candidatos' => $votos_candidatos
+        ]);
+    }
+
+    public function impugnar()
+    {
+        $idProceso= Auth::user()->id_proceso;
+        $result = Proceso::find($idProceso);
+        $hora_apertura = $result->hora_apertura;
+        $casillas = Casilla::where('id_proceso', $idProceso)
+                            ->whereTime('hora_apertura', '>=', $hora_apertura )
+                            ->latest('id_casilla')
+                            ->paginate(6);
+
+        return view('votos.impugnar', [
+            'casillas' => $casillas
+        ]);
     }
 }

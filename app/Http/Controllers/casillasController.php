@@ -195,4 +195,19 @@ class casillasController extends Controller
 
         return redirect()->route('casillas.index')->with('message', $message);
     }
+
+    // created before
+
+    public function imp($id_casilla)
+    {
+        $casillas = Casilla::findOrFail($id_casilla); 
+        $partidos = Partido::get();
+        $votos = Voto::with('partido')->where('id_casilla', $id_casilla)->get();
+
+        return view('casillas.imp', [
+            'casillas' => $casillas,
+            'partidos' => $partidos,
+            'votos' => $votos
+        ]);
+    }
 }

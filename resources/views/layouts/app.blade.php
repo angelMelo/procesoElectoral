@@ -41,6 +41,7 @@
                                 @else
                                     <li><a href="{{ route('home') }}" class="waves-effect waves-teal">Home</a></li>
                                     <li><a href="{{ route('casillas.index') }}" class="waves-effect waves-teal">Casillas</a></li>
+                                    <li><a href="{{ route('votos.impugnar') }}" class="waves-effect waves-teal">Impugnar</a></li>
                                     <li><a href="{{ route('votos.graph') }}" class="waves-effect waves-teal">Graficas</a></li>
                                     <li>
                                         <a onclick="M.toast({html: 'Tu sesión esta Activa'})">
@@ -83,6 +84,7 @@
             @else
                 <li><a href="{{ route('home') }}" class="waves-effect waves-teal">Home</a></li>
                 <li><a href="{{ route('casillas.index') }}" class="waves-effect waves-teal">Casillas</a></li>
+                <li><a href="{{ route('votos.impugnar') }}" class="waves-effect waves-teal">Impugnar</a></li>
                 <li><a href="{{ route('votos.graph') }}" class="waves-effect waves-teal">Graficas</a></li>
                 <li>
                     <a onclick="M.toast({html: 'Tu sesión esta Activa'})">
