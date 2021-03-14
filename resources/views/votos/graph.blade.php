@@ -81,13 +81,12 @@ $(document).ready(function(){
         setInterval(() => {
             votos_candidatos(
                 function(output){
-                    var $votos = output['votos'];
-                    var data = google.visualization.arrayToDataTable([
-                        ['Partido', 'Votos'], 
-                        @foreach($votos as $row) 
-                            [ '{{ $row->nombre }}', parseInt('{{ $row->suma }}') ],
-                        @endforeach 
-                    ]);
+                    var new_data = output['votos'];
+                    var new_data_array = [['Partido', 'Votos']]
+                    new_data.forEach(element => new_data_array.push([element.nombre, parseInt(element.suma)]) );
+                    var data = google.visualization.arrayToDataTable(
+                        new_data_array
+                    );
                     chart.draw(data, options);
                 }
             );
@@ -125,13 +124,12 @@ $(document).ready(function(){
         setInterval(() => {
             votos_candidatos(
                 function(output){
-                    var $votos = output['candidatos'];
-                    var data = google.visualization.arrayToDataTable([
-                        ['Candidato', 'Votos'], 
-                        @foreach($candidatos as $row) 
-                            [ '{{ $row->nombre }}', parseInt('{{ $row->suma }}') ],
-                        @endforeach 
-                    ]);
+                    var new_data = output['candidatos'];
+                    var new_data_array = [['Candidato', 'Votos']]
+                    new_data.forEach(element => new_data_array.push([element.nombre, parseInt(element.suma)]) );
+                    var data = google.visualization.arrayToDataTable(
+                        new_data_array
+                    );
                     chart.draw(data, options);
                 }
             );
